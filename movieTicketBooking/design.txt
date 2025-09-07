@@ -1,0 +1,120 @@
+Movie booking system final design:
+core entites:
+	seat
+	hall
+	show
+	theatre
+	customer
+	centralBookingSystem
+core services
+	catalog and search service
+	bookingManagerservice
+	paymentService
+explanation and abbreviation for each class
+	seat class -> hold information of each seat for a show in a hall
+		attributes:
+			seatid:str
+			seattype:enum("economy" , "premium")
+			status:enum("occupied" , "available")
+		methods:
+			isAvailable()->bool
+			getDetails()->str
+			reserve()->bool
+			release()->bool
+	hall class -> hold information regarding each hall and shows it has per day
+		attributes:
+			hallid:str
+			List<show>shows
+		methods:
+			addshow(show)->bool
+			removeshow(show)->bool
+	show class -> hold information regarding each show , show means what played at a hall
+		attributes:
+			showid: str
+			playedat: theatre
+			hall: hall
+			start_time: datetime
+			end_time: datetime
+			movie: movie
+			List<seats>
+		methods:
+            addSeat(seat) -> bool
+            removeSeat(seat) -> bool
+			isAvailable(seat)->bool
+			ListAllavailabe()->str
+	theatre class -> hold information regarding each theatre and halls it contain
+		attributes:
+			theatreid:str
+			location:str
+			List<hall>halls
+		method:
+			getDetails()-> str
+			addHall()-> bool
+			removeHall(hall)-> bool
+	movie class -> hold information regarding each movie
+		attibutes:
+			movieid:str
+			moviename:str
+			genre:str
+			durationinmins:int
+			description:str 
+			language:str
+			List<show>
+		method:
+			getDetails()->str
+	customer class -> hold information regarding each customer
+		attribute:
+			custid: str
+			custname: str
+			email: str
+			totalpayable: int
+			mp<show : seats> -> map which says for which show how what seats he has booked
+			totalCash: int
+            bookingManagerservice: BookingManagerService
+		methods:
+			makebookings(show , seat , "type" , paymentMethod)->bool
+			viewbookings()->dict
+			cancelBookings(show , seat , "type") -> bool
+	centralBookingSystem:
+		attributes:
+			BookingManagerService(paymentService , NotificationService)
+			CatalogSearchService
+			map<location -> theatre>
+			List<shows>
+			List<customer>customers
+		methods:
+			add customer()
+			remove customer()
+			add theatre()
+			makeBooking(customer , show , seat)
+			remove theatre()
+			search()
+	services:
+		bookingMangerService -> has also payment service which will handle the payment:
+			method:
+				makeBooking(customer , show , seat , paymentMethod)->returns amount if suceeded else False
+                cancelBooking(customer , show , Seat)
+		catalogSearch -> service for searching
+            attribute:
+                List<show>shows
+			method:
+				searchBytitle()
+				searchbyloc()
+				searchbygenre()
+				searchbylang()
+		NotificationService -> for notifying bookings and for notifyCancelling
+            method:
+                notifyBooking(customer , show , seat)
+                notifyCancelling(customer , show , seat)
+        paymentService -> for making payment supports credit and cash system
+            methods:
+                processPayment(customer , amount , paymentMethod)
+				
+			
+	
+	
+	
+	
+			 
+		
+			
